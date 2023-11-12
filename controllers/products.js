@@ -52,7 +52,7 @@ const getProductById = async (req, res) => {
 };
 const updateProduct = async (req, res) => {
     const valid_product_id = mongoose.Types.ObjectId.isValid(req.params.id);
-    const valid_cat_id = mongoose.Types.ObjectId.isValid(req.body.category);
+    const valid_cat_id = mongoose.isValidObjectId(req.body.category);
     if (!valid_product_id) {
         res.status(400).json({ massage: 'Invalid product Id' });
     }
@@ -108,10 +108,38 @@ const deleteProduct = async (req, res) => {
             });
         });
 };
+
+const countProducts =async (req,res)=>{
+const p_count = await Product.countDocuments()
+if(!p_count){
+    res.status(500).json({"message":"no products count"})
+}
+res.status(200).json({count:p_count})
+}
+
+const featuredProducts = async (req, res) => {
+    try {     
+        const count = req.params.count ? req.params.count : 0;
+        const featured = await Product.find({ isFeatured: true }).populate('category').limit(+count);
+
+        if (!featured || featured.length === 0) {
+            return res.status(404).json({ message: 'No featured products found' });
+        }
+
+        res.status(200).json({ message: 'Success', data: featured });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' ,error:error.message});
+    }
+};
+
+
+
 export {
     getAllProducts,
     createProduct,
     getProductById,
     updateProduct,
     deleteProduct,
+    countProducts,
+    featuredProducts
 };

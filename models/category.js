@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
 var categorySchema = new mongoose.Schema({
     name: {
@@ -11,7 +11,14 @@ var categorySchema = new mongoose.Schema({
     color: {
         type: String,
     },
-});
+})
 
-const Category = mongoose.model('Category', categorySchema);
+categorySchema.virtual('id').get(function () {
+    return this._id.toHexString()
+})
+
+categorySchema.set('toJSON', {
+    virtuals: true,
+})
+const Category = mongoose.model('Category', categorySchema)
 export default Category

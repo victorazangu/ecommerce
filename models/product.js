@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 var productSchema = new mongoose.Schema({
     name: {
@@ -57,7 +57,16 @@ var productSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+})
+
+
+productSchema.virtual('id').get(function () {
+    return this._id.toHexString()
+})
+
+productSchema.set('toJSON', {
+    virtuals: true,
 });
 
-const Product = mongoose.model('Product', productSchema);
-export default Product;
+const Product = mongoose.model('Product', productSchema)
+export default Product
