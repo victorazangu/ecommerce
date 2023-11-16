@@ -10,6 +10,7 @@ import errorHandlers from './middlewares/errorHandler.js'
 import ProductRouter from './routes/products.js'
 import CategoryRouter from './routes/categories.js'
 import UserRouter from './routes/users.js'
+import OrderRouter from './routes/orders.js'
 import { authJWT } from './middlewares/isAuthenticated.js'
 
 dbConnect()
@@ -32,6 +33,7 @@ app.options('*', cors())
 app.use(`${API_URL}/products`, ProductRouter)
 app.use(`${API_URL}/categories`, CategoryRouter)
 app.use(`${API_URL}/users`, UserRouter)
+app.use(`${API_URL}/orders`, OrderRouter)
 
 app.listen(PORT, () => {
     console.log('server running on port', PORT)
